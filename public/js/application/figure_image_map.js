@@ -29,13 +29,13 @@ define(function () {
                 sw: 64,
                 sh: 64
             },
-            K: {
+            Q: {
                 sx: 256,
                 sy: 0,
                 sw: 64,
                 sh: 64
             },
-            Q: {
+            K: {
                 sx: 320,
                 sy: 0,
                 sw: 64,
@@ -68,13 +68,13 @@ define(function () {
                 sw: 64,
                 sh: 64
             },
-            K: {
+            Q: {
                 sx: 256,
                 sy: 64,
                 sw: 64,
                 sh: 64
             },
-            Q: {
+            K: {
                 sx: 320,
                 sy: 64,
                 sw: 64,

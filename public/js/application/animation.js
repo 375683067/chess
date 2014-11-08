@@ -4,11 +4,27 @@
 define([], function () {
     return function AnimationConstructor (config) {
         var canvas;
+        var Listeners = {
+            'click': []
+        };
+        var catchEvent = function (ev) {
+            var x = ev.offsetX,
+                y = ev.offsetY,
+                type = ev.type,
+                i, len, CurrentListeners = Listeners[type] || [];
+            for (i = 0, len = CurrentListeners.length; i < len; i++) {
+                if (x > CurrentListeners[i].texture.x && x < CurrentListeners[i].texture.x  + CurrentListeners[i].texture.w &&
+                y > CurrentListeners[i].texture.y && y < CurrentListeners[i].texture.y  + CurrentListeners[i].texture.h) {
+                    CurrentListeners[i].callback(CurrentListeners[i].texture);
+                }
+            }
+        };
         if (config && config.canvas_id) {
             canvas = document.getElementById(config.canvas_id);
             this.context = canvas.getContext('2d');
             this.canvas_width = canvas.width;
             this.canvas_height = canvas.height;
+            canvas.addEventListener('click', catchEvent);
         };
         /**
          * public methods
@@ -46,8 +62,14 @@ define([], function () {
         /**
          *
          */
-        this.addEventListener = function () {
-
+        this.addEventListener = function (type, callback) {
+            if (!Listeners[type]) {
+                Listeners[type] = [];
+            }
+            Listeners[type].push({
+                texture: this,
+                callback: callback
+            });
         };
         /**
          *
@@ -79,6 +101,8 @@ define([], function () {
                         this[key] = parseFloat(this[key]) / 100 * this.canvas_width;
                     }
                 }
+                this.figure_color = option.figure_color;
+                this.figure = option.figure;
                 this.fill_style = option.fill_style !== undefined ? option.fill_style : this.fill_style;
                 this.render_function = option.render_function !== undefined ? option.render_function : this.render_function;
                 option.img && this.setImage(option.img);

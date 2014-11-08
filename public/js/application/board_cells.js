@@ -33,10 +33,14 @@ define(['figure_image_map'], function (ImageMap) {
                     CurrentCell.setOptions({
                         position: FigureImg,
                         img: ImageMap.img,
+                        figure_color: chess_type,
+                        figure: figure_type,
                         render_function: 'drawImageWithFullSetParams'
                     });
-                    debugger;
                     CurrentCell.render();
+                    CurrentCell.addEventListener('click', function (texture) {
+                        debugger;
+                    });
                 }
             }
         };
