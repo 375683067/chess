@@ -10,11 +10,12 @@ define(['figure_image_map'], function (ImageMap) {
             for (j = 0; j < len; j++) {
                 if (side)
                 CellTexture = new Animation.createTexture({
-                    w: side + prefix,
-                    h: side + prefix,
-                    x: i * side + prefix,
-                    y: j * side + prefix,
-                    fill_style: '#' + (r + 1) + (g+j) + (b+i) + (r + 1) + (g+j) + (b+i),
+                    position: {
+                        w: side + prefix,
+                        h: side + prefix,
+                        x: i * side + prefix,
+                        y: j * side + prefix
+                    }
                 });
                 this.cells[String.fromCharCode(a_char_code + i) + j] = CellTexture;
             }
@@ -24,19 +25,17 @@ define(['figure_image_map'], function (ImageMap) {
          */
         this.renderFigures = function (BoardInfo) {
             var chess_type, CurrentCell, cell_id, FigureImg, figure_type;
-            var img = document.createElement('img');
-            img.src = ImageMap.img;
             for (chess_type in BoardInfo) {
                 for (cell_id in BoardInfo[chess_type]) {
                     figure_type = BoardInfo[chess_type][cell_id];
                     FigureImg = ImageMap[chess_type][figure_type];
                     CurrentCell = this.cells[cell_id];
-                    CurrentCell.sx = FigureImg.sx;
-                    CurrentCell.sy = FigureImg.sy;
-                    CurrentCell.sw = FigureImg.sw;
-                    CurrentCell.sh = FigureImg.sh;
-                    CurrentCell.img = img;
-                    CurrentCell.render_function = 'drawImageWithFullSetParams';
+                    CurrentCell.setOptions({
+                        position: FigureImg,
+                        img: ImageMap.img,
+                        render_function: 'drawImageWithFullSetParams'
+                    });
+                    debugger;
                     CurrentCell.render();
                 }
             }

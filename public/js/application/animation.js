@@ -65,33 +65,38 @@ define([], function () {
          * @param config
          */
         this.createTexture = function (option) {
-            option = option || {};
-            this.x = option.x || 0;
-            this.y = option.y || 0;
-            this.w = option.w || 0;
-            this.h = option.h || 0;
-            this.fill_style = option.fill_style;
-            this.render_function = option.render_function || 'drawImage';
-            if (option.img) {
+            /**
+             * @param options
+             */
+            this.x = this.y = this.sx = this.sy = this.h = this.w = this.sh = this.sw = 0;
+            this.setOptions = function (option) {
+                var key;
+                this.render_function =  this.render_function || 'drawImage';
+
+                for (key in option.position) {
+                    this[key] = option.position[key];
+                    if ((typeof this[key] ===  'string') && (this[key].indexOf('%') !== -1)) {
+                        this[key] = parseFloat(this[key]) / 100 * this.canvas_width;
+                    }
+                }
+                this.fill_style = option.fill_style !== undefined ? option.fill_style : this.fill_style;
+                this.render_function = option.render_function !== undefined ? option.render_function : this.render_function;
+                option.img && this.setImage(option.img);
+            };
+            /**
+             *
+             */
+            this.setImage = function (image) {
                 this.img = document.createElement('img');
-                this.img.src = option.img;
-            }
-            //if texture pos is percent value
-            if ((typeof this.x ===  'string') && (this.x.indexOf('%') !== -1)) {
-                this.x = parseFloat(this.x) / 100 * this.canvas_width;
-            }
-            if ((typeof  this.y ===  'string') && (this.y.indexOf('%') !== -1)) {
-                this.y = parseFloat(this.y) / 100 * this.canvas_height;
-            }
-            if ((typeof this.w ===  'string') && (this.w.indexOf('%') !== -1)) {
-                this.w = parseFloat(this.w) / 100 * this.canvas_width;
-            }
-            if ((typeof this.h ===  'string') && (this.h.indexOf('%') !== -1)) {
-                this.h = parseFloat(this.h) / 100 * this.canvas_height;
-            }
+                this.img.src = image;
+            };
+            /**
+             *
+             */
             this.render = function () {
                 this[this.render_function]();
-            }
+            };
+            option && this.setOptions(option);
         };
         /**
          *

@@ -8,8 +8,10 @@ define(['animation', 'board_cells', 'data/start_position_info'], function (Anima
             canvas_id: 'canvas'
         });
         var BackgroundTexture = new Animation.createTexture({
-            w: '100%',
-            h: '100%',
+            position: {
+                w: '100%',
+                h: '100%'
+            },
             img: '/img/board0.png',
             render_function: 'drawImage'
         });
