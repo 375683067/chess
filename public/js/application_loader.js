@@ -21,7 +21,8 @@ require.config({
 });
 var ImageForPreload = [
         '/img/board0.png',
-        '/img/figure.png'
+        '/img/figure.png',
+        '/img/hightliht.png'
     ],
     preloaded_image_cout = 0;
 window.require(['app'], function (app) {

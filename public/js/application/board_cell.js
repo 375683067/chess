@@ -9,6 +9,9 @@ define(['figure_image_map'], function BoardCellConstructor (FigureImageMap) {
         this.color;
         this.figure;
         this.setImage(FigureImageMap.img);
+        /**
+         * @param figure
+         */
         this.setFigure = function (color, figure) {
             this.color = color;
             this.figure = figure;
@@ -19,15 +22,31 @@ define(['figure_image_map'], function BoardCellConstructor (FigureImageMap) {
          *
          */
         this.turnHighthligh = function () {
-
+            this.putSnapshot('clear');
+            this.HightLight.render();
+            this.render();
         };
         /**
          *
          */
         this.turnOffHighthligh = function () {
-
+            this.putSnapshot('clear');
+            this.render();
         };
+        /**
+         *
+         */
         options && this.setOptions(options);
         this.makeSnapshot('clear');
+        this.HightLight = new this.texture({
+            position: {
+                x: this.x,
+                y: this.y,
+                w: this.w,
+                h: this.h
+            },
+            img: '/img/hightliht.png',
+            render_function: 'drawImage'
+        });
     };
 });

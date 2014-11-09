@@ -100,7 +100,7 @@ define([], function () {
         /**
          * @param config
          */
-        this.createTexture = function (option) {
+        this.texture = function (option) {
             /**
              * @param options
              */
@@ -141,6 +141,6 @@ define([], function () {
         /**
          *
          */
-        this.extend(this.createTexture, this);
+        this.extend(this.texture, this);
     };
 });

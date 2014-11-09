@@ -7,7 +7,7 @@ define(['animation', 'board_cells', 'data/start_position_info'], function (Anima
         var Animation = new AnimationConstructor({
             canvas_id: 'canvas'
         });
-        var BackgroundTexture = new Animation.createTexture({
+        var BackgroundTexture = new Animation.texture({
             position: {
                 w: '100%',
                 h: '100%'

@@ -6,8 +6,9 @@ define(['figure_image_map', 'app_dir/board_cell'], function (ImageMap, BoardCell
         /**
          *
          */
-        BoardCellConstructor = Animation.extend(BoardCellConstructor, Animation.createTexture);
+        BoardCellConstructor = Animation.extend(BoardCellConstructor, Animation.texture);
         this.cells = {};
+        this.ActiveCell;
         /**
          *
          */
@@ -42,15 +43,26 @@ define(['figure_image_map', 'app_dir/board_cell'], function (ImageMap, BoardCell
         /**
          *
          */
+        var _this = this;
+        var onFigureSelected = function (BoardCell) {
+            if (_this.ActiveCell) {
+                _this.ActiveCell.turnOffHighthligh();
+            }
+            BoardCell.turnHighthligh();
+            _this.ActiveCell = BoardCell;
+        };
+        /**
+         *
+         */
         this.renderFigures = function (BoardInfo) {
-            var chess_color, CurrentCell, cell_id;
+            var chess_color, CurrentCell, _this = this, cell_id;
             for (chess_color in BoardInfo) {
                 for (cell_id in BoardInfo[chess_color]) {
                     CurrentCell = this.cells[cell_id];
                     CurrentCell.setFigure(chess_color, BoardInfo[chess_color][cell_id]);
-                    CurrentCell.addEventListener('click', function (texture) {
-                        texture.putSnapshot('clear');
-                    });
+                    if (chess_color === color_side) {
+                        CurrentCell.addEventListener('click', onFigureSelected);
+                    }
                 }
             }
         };
