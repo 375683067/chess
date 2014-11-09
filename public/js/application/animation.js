@@ -36,10 +36,11 @@ define([], function () {
         this.extend = function Texture (Child, Parent) {
             if (Parent instanceof Function) {
                 Child.prototype = new Parent();
-                Child.prototype.constructor = Child;
             } else {
                 Child.prototype = this;
             }
+            Child.prototype.constructor = Child;
+            return Child;
         };
         /**
          *
@@ -104,21 +105,21 @@ define([], function () {
              * @param options
              */
             this.x = this.y = this.sx = this.sy = this.h = this.w = this.sh = this.sw = 0;
+            this.render_function = 'fillRect';
             this.snapshots = {};
             this.setOptions = function (option) {
                 var key;
-                this.render_function =  this.render_function || 'drawImage';
-
                 for (key in option.position) {
                     this[key] = option.position[key];
                     if ((typeof this[key] ===  'string') && (this[key].indexOf('%') !== -1)) {
                         this[key] = parseFloat(this[key]) / 100 * this.canvas_width;
                     }
                 }
-                this.figure_color = option.figure_color;
-                this.figure = option.figure;
-                this.fill_style = option.fill_style !== undefined ? option.fill_style : this.fill_style;
-                this.render_function = option.render_function !== undefined ? option.render_function : this.render_function;
+                for (key in option) {
+                    if (key !== 'position') {
+                        this[key] = option[key];
+                    }
+                }
                 option.img && this.setImage(option.img);
             };
             /**

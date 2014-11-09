@@ -1,11 +1,12 @@
 /**
  * Created by Holden Caulfield on 06.11.2014.
  */
-define(['figure_image_map'], function (ImageMap) {
+define(['figure_image_map', 'app_dir/board_cell'], function (ImageMap, BoardCellConstructor) {
     return function (Animation, color_side) {
         /**
          *
          */
+        BoardCellConstructor = Animation.extend(BoardCellConstructor, Animation.createTexture);
         this.cells = {};
         /**
          *
@@ -24,7 +25,7 @@ define(['figure_image_map'], function (ImageMap) {
             for (i = 0; i < len; i++) {
                 for (j = 0; j < len; j++) {
                     cell_id = String.fromCharCode(a_char_code + i) + j;
-                    CellTexture = new Animation.createTexture({
+                    CellTexture = new BoardCellConstructor({
                         position: {
                             _id: cell_id,
                             w: side + prefix,
@@ -42,21 +43,11 @@ define(['figure_image_map'], function (ImageMap) {
          *
          */
         this.renderFigures = function (BoardInfo) {
-            var chess_type, CurrentCell, cell_id, FigureImg, figure_type;
-            for (chess_type in BoardInfo) {
-                for (cell_id in BoardInfo[chess_type]) {
-                    figure_type = BoardInfo[chess_type][cell_id];
-                    FigureImg = ImageMap[chess_type][figure_type];
+            var chess_color, CurrentCell, cell_id;
+            for (chess_color in BoardInfo) {
+                for (cell_id in BoardInfo[chess_color]) {
                     CurrentCell = this.cells[cell_id];
-                    CurrentCell.makeSnapshot('clear');
-                    CurrentCell.setOptions({
-                        position: FigureImg,
-                        img: ImageMap.img,
-                        figure_color: chess_type,
-                        figure: figure_type,
-                        render_function: 'drawImageWithFullSetParams'
-                    });
-                    CurrentCell.render();
+                    CurrentCell.setFigure(chess_color, BoardInfo[chess_color][cell_id]);
                     CurrentCell.addEventListener('click', function (texture) {
                         texture.putSnapshot('clear');
                     });

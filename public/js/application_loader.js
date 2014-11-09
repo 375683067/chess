@@ -10,6 +10,7 @@ require.config({
         animation: 'application/animation',
         board_cells: 'application/board_cells',
         data: '../data',
+        app_dir: 'application',
         figure_image_map: './application/figure_image_map'
     },
     shim: {
