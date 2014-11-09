@@ -6,7 +6,7 @@ define([], function () {
         var canvas;
         var Listeners = {
             'click': []
-        };
+            }, Textures = [];
         var catchEvent = function (ev) {
             var x = ev.offsetX,
                 y = ev.offsetY,
@@ -36,6 +36,7 @@ define([], function () {
         this.extend = function Texture (Child, Parent) {
             if (Parent instanceof Function) {
                 Child.prototype = new Parent();
+                Child.prototype.constructor = Child;
             } else {
                 Child.prototype = this;
             }
@@ -84,6 +85,18 @@ define([], function () {
 
         };
         /**
+         *
+         */
+        this.putSnapshot = function (name) {
+            this.context.putImageData(this.snapshots[name], this.x, this.y);
+        };
+        /**
+         *
+         */
+        this.makeSnapshot = function (name) {
+            this.snapshots[name] = this.context.getImageData(this.x, this.y, this.w, this.h);
+        };
+        /**
          * @param config
          */
         this.createTexture = function (option) {
@@ -91,6 +104,7 @@ define([], function () {
              * @param options
              */
             this.x = this.y = this.sx = this.sy = this.h = this.w = this.sh = this.sw = 0;
+            this.snapshots = {};
             this.setOptions = function (option) {
                 var key;
                 this.render_function =  this.render_function || 'drawImage';
@@ -121,6 +135,7 @@ define([], function () {
                 this[this.render_function]();
             };
             option && this.setOptions(option);
+            Textures.push(this);
         };
         /**
          *

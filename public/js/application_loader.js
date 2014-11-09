@@ -24,6 +24,10 @@ var ImageForPreload = [
     ],
     preloaded_image_cout = 0;
 window.require(['app'], function (app) {
+
+    test_canvas = document.getElementById('test_canvas');
+    test_context = test_canvas.getContext('2d');
+
     var i, len = ImageForPreload.length, img;
     if (len) {
         for (i = 0; i < len; i++) {

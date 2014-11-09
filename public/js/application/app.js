@@ -16,7 +16,7 @@ define(['animation', 'board_cells', 'data/start_position_info'], function (Anima
             render_function: 'drawImage'
         });
         BackgroundTexture.render();
-        var BoardCells = new BoardCellsConstructor(Animation);
+        var BoardCells = new BoardCellsConstructor(Animation, 'white');
         BoardCells.renderFigures(StartPostion);
 
     };
