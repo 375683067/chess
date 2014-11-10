@@ -21,23 +21,58 @@ define(['figure_image_map'], function BoardCellConstructor (FigureImageMap) {
         /**
          *
          */
-        this.turnHighthligh = function () {
+        this.turnHighthligh = function (threat_flag) {
             this.putSnapshot('clear');
-            this.HightLight.render();
-            this.render();
+            if (threat_flag) {
+                this.ThreatHightlight.render();
+            } else {
+                this.HightLight.render();
+
+            }
+            this.figure && this.render();
+        };
+        /**
+         *
+         */
+        this.takeFigure = function () {
+            var Figure = {
+                color: this.color,
+                figure: this.figure
+            };
+            this.color = null;
+            this.figure = null;
+            this.putSnapshot('clear');
+            return Figure;
         };
         /**
          *
          */
         this.turnOffHighthligh = function () {
             this.putSnapshot('clear');
-            this.render();
+            this.figure && this.render();
         };
         /**
          *
          */
         options && this.setOptions(options);
         this.makeSnapshot('clear');
+        /**
+         *
+         * @type {texture}
+         */
+        this.ThreatHightlight = new this.texture({
+            position: {
+                x: this.x,
+                y: this.y,
+                w: this.w,
+                h: this.h
+            },
+            img: '/img/threat_hightliht.png',
+            render_function: 'drawImage'
+        });
+        /**
+         *
+         */
         this.HightLight = new this.texture({
             position: {
                 x: this.x,

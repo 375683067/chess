@@ -6,7 +6,7 @@ var start_position = {
         'a0' : 'R',
         'b0' : 'N',
         'c0' : 'B',
-        'd0' : 'Q',
+        'd5' : 'Q',
         'e0' : 'K',
         'f0' : 'B',
         'g0' : 'N',

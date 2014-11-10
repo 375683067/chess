@@ -1,7 +1,7 @@
 /**
  * Created by Holden Caulfield on 06.11.2014.
  */
-define(['figure_image_map', 'app_dir/board_cell'], function (ImageMap, BoardCellConstructor) {
+define(['figure_image_map', 'app_dir/board_cell','data/moves'], function (ImageMap, BoardCellConstructor, AllowMoves) {
     return function (Animation, color_side) {
         /**
          *
@@ -9,6 +9,7 @@ define(['figure_image_map', 'app_dir/board_cell'], function (ImageMap, BoardCell
         BoardCellConstructor = Animation.extend(BoardCellConstructor, Animation.texture);
         this.cells = {};
         this.ActiveCell;
+        this.BoardInfo;
         /**
          *
          */
@@ -45,17 +46,66 @@ define(['figure_image_map', 'app_dir/board_cell'], function (ImageMap, BoardCell
          */
         var _this = this;
         var onFigureSelected = function (BoardCell) {
+            var Moves;
             if (_this.ActiveCell) {
                 _this.ActiveCell.turnOffHighthligh();
+                _this.unHightlightAllowerdMoves(_this.HightLightedCells);
+                _this.HightLightedCells = null;
             }
             BoardCell.turnHighthligh();
+            Moves = AllowMoves(_this.BoardInfo, BoardCell.figure, BoardCell._id, color_side);
+            _this.HightLightedCells = Moves.allow.concat(Moves.threat);
+            _this.addPutEventListenersForCells(_this.HightLightedCells);
+            _this.hightlightAllowedMoves(Moves.allow);
+            _this.hightlightAllowedMoves(Moves.threat, true);
             _this.ActiveCell = BoardCell;
         };
         /**
          *
          */
+        var putFigure = function (Cell) {
+            var Figure;
+            Figure = _this.ActiveCell.takeFigure();
+            Cell.setFigure(Figure.color, Figure.figure);
+            _this.unHightlightAllowerdMoves(_this.HightLightedCells);
+        };
+        /**
+         *
+         */
+        this.addPutEventListenersForCells = function (CellsArray) {
+            var len, i, CurrentCell;
+            for (i = 0, len = CellsArray.length; i < len; i++) {
+                CurrentCell = this.cells[CellsArray[i]];
+                CurrentCell.addEventListener('click', putFigure);
+            }
+        };
+        /**
+         *
+         */
+        this.unHightlightAllowerdMoves = function (AllowedMoves) {
+            var i, len;
+            for (i = 0, len = AllowedMoves.length; i < len; i++) {
+                this.cells[AllowedMoves[i]].turnOffHighthligh();
+            }
+        };
+        /**
+         *
+         * @param AllowedMoves
+         * @param [threat]
+         */
+        this.hightlightAllowedMoves = function (AllowedMoves, threat) {
+            var i, len;
+            for (i = 0, len = AllowedMoves.length; i < len; i++) {
+
+                this.cells[AllowedMoves[i]].turnHighthligh(threat);
+            }
+        };
+        /**
+         *
+         */
         this.renderFigures = function (BoardInfo) {
-            var chess_color, CurrentCell, _this = this, cell_id;
+            this.BoardInfo = BoardInfo;
+            var chess_color, CurrentCell, cell_id;
             for (chess_color in BoardInfo) {
                 for (cell_id in BoardInfo[chess_color]) {
                     CurrentCell = this.cells[cell_id];
