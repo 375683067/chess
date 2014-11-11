@@ -67,7 +67,21 @@ define(['figure_image_map', 'app_dir/board_cell','data/moves'], function (ImageM
             var Figure;
             Figure = _this.ActiveCell.takeFigure();
             Cell.setFigure(Figure.color, Figure.figure);
+            Cell.addEventListener('click', onFigureSelected);
+            _this.removePutEventListeners(_this.HightLightedCells);
+            _this.ActiveCell.removeEventListener('click', onFigureSelected);
             _this.unHightlightAllowerdMoves(_this.HightLightedCells);
+            _this.ActiveCell = null;
+        };
+        /**
+         *
+         */
+        this.removePutEventListeners = function (CellsArray) {
+            var len, i, CurrentCell;
+            for (i = 0, len = CellsArray.length; i < len; i++) {
+                CurrentCell = this.cells[CellsArray[i]];
+                CurrentCell.removeEventListener('click', putFigure);
+            }
         };
         /**
          *

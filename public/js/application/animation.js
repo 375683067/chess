@@ -11,8 +11,9 @@ define([], function () {
             var x = ev.offsetX,
                 y = ev.offsetY,
                 type = ev.type,
-                i, len, CurrentListeners = Listeners[type] || [];
-            for (i = 0, len = CurrentListeners.length; i < len; i++) {
+                i, CurrentListeners = Listeners[type] || [];
+            for (i = 0;i < CurrentListeners.length; i++) {
+                if (!CurrentListeners[i]) debugger;
                 if (x > CurrentListeners[i].texture.x && x < CurrentListeners[i].texture.x  + CurrentListeners[i].texture.w &&
                 y > CurrentListeners[i].texture.y && y < CurrentListeners[i].texture.y  + CurrentListeners[i].texture.h) {
                     CurrentListeners[i].callback(CurrentListeners[i].texture);
@@ -72,6 +73,21 @@ define([], function () {
                 texture: this,
                 callback: callback
             });
+        };
+        /**
+         *
+         */
+        this.removeEventListener = function (type, callback) {
+            var ExistedEventListeners = Listeners[type],
+                i, len;
+            for (i = 0, len = ExistedEventListeners.length; i < len; i++) {
+                if (ExistedEventListeners[i].texture === this
+                    && ExistedEventListeners[i].callback === callback) {
+                    ExistedEventListeners.splice(i, 1);
+                    return true;
+                }
+            }
+            return false;
         };
         /**
          *
