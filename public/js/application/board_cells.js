@@ -65,6 +65,15 @@ define(['figure_image_map', 'app_dir/board_cell','data/moves'], function (ImageM
          */
         var putFigure = function (Cell) {
             var Figure;
+
+            delete _this.BoardInfo[color_side][_this.ActiveCell._id];
+            if (color_side === 'white') {
+                delete _this.BoardInfo['black'][Cell._id];
+            } else {
+                delete _this.BoardInfo['white'][Cell._id];
+            }
+            _this.BoardInfo[color_side][Cell._id] = _this.ActiveCell.figure;
+
             Figure = _this.ActiveCell.takeFigure();
             Cell.setFigure(Figure.color, Figure.figure);
             Cell.addEventListener('click', onFigureSelected);
